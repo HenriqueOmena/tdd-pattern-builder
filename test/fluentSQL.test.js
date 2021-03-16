@@ -14,7 +14,7 @@ const data = [
   },
   {
     id: 3,
-    name: "omena",
+    name: "julia",
     category: "manager",
   },
 ];
@@ -26,7 +26,7 @@ describe("Test Suite for fluentSql builder", () => {
     expect(result).toStrictEqual(expected);
   });
 
-  test("#build should return athe empty object instance", () => {
+  test("#build should return the empty object instance", () => {
     const result = FluentSQLBuilder.for(data).build();
     const expected = data;
     expect(result).toEqual(expected);
@@ -38,13 +38,44 @@ describe("Test Suite for fluentSql builder", () => {
     expect(result).toStrictEqual(expected);
   });
 
-  test("#where given a collection it should filter results", () => {
+  test.only("#where given a collection it should filter results", () => {
     const result = FluentSQLBuilder.for(data).where({ category: /^dev/ }).build();
     const expected = data.filter(({ category }) => category.slice(0, 3) === "dev");
+    console.log("aaa", expected);
     expect(result).toStrictEqual(expected);
   });
-  // test.todo("#select given a collection it should return only specific fields");
-  // test.todo("#orderBy given a collection it should return only specific fields");
 
-  // test.todo("pipeline");
+  test("#select given a collection it should return only specific fields", () => {
+    const result = FluentSQLBuilder.for(data).select(["name", "category"]).build();
+    const expected = data.map(({ name, category }) => ({ name, category }));
+    expect(result).toStrictEqual(expected);
+  });
+
+  test("#orderBy given a collection it should return only specific fields", () => {
+    const result = FluentSQLBuilder.for(data).orderBy("name").build();
+    const expected = [
+      {
+        id: 2,
+        name: "henrique",
+        category: "developer",
+      },
+      {
+        id: 3,
+        name: "julia",
+        category: "manager",
+      },
+      {
+        id: 1,
+        name: "omena",
+        category: "developer",
+      },
+    ];
+    expect(result).toStrictEqual(expected);
+  });
+
+  test("pipeline", () => {
+    const result = FluentSQLBuilder.for(data).where({ category: "developer" }).build();
+
+    console.log(result);
+  });
 });
