@@ -26,7 +26,6 @@ export default class FluentSQLBuilder {
   }
 
   where(query) {
-    this.#where = query;
     const [[prop, selectedValue]] = Object.entries(query);
     const whereFilter = selectedValue instanceof RegExp ? selectedValue : new RegExp(selectedValue);
     this.#where.push({ prop, filter: whereFilter });
