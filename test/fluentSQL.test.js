@@ -17,6 +17,11 @@ const data = [
     name: "julia",
     category: "manager",
   },
+  {
+    id: 4,
+    name: "omena2",
+    category: "developer",
+  },
 ];
 
 describe("Test Suite for fluentSql builder", () => {
@@ -38,10 +43,9 @@ describe("Test Suite for fluentSql builder", () => {
     expect(result).toStrictEqual(expected);
   });
 
-  test.only("#where given a collection it should filter results", () => {
+  test("#where given a collection it should filter results", () => {
     const result = FluentSQLBuilder.for(data).where({ category: /^dev/ }).build();
     const expected = data.filter(({ category }) => category.slice(0, 3) === "dev");
-    console.log("aaa", expected);
     expect(result).toStrictEqual(expected);
   });
 
@@ -69,13 +73,28 @@ describe("Test Suite for fluentSql builder", () => {
         name: "omena",
         category: "developer",
       },
+      {
+        id: 4,
+        name: "omena2",
+        category: "developer",
+      },
     ];
     expect(result).toStrictEqual(expected);
   });
 
   test("pipeline", () => {
-    const result = FluentSQLBuilder.for(data).where({ category: "developer" }).build();
+    const result = FluentSQLBuilder.for(data)
+      .where({ category: "developer" })
+      .where({ name: /m/ })
+      .select(["name", "category"])
+      .orderBy("name")
+      .build();
 
-    console.log(result);
+    const expected = [
+      { name: "omena", category: "developer" },
+      { name: "omena2", category: "developer" },
+    ];
+
+    expect(result).toStrictEqual(expected);
   });
 });
