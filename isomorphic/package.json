@@ -4,6 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "console": "node ui/index.mjs"
+    "console": "node ui/index.mjs",
+    "web": "npx http-server ."
+  },
+  "dependencies": {
+    "http-server": "^0.12.3"
   }
 }
